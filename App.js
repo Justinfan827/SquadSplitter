@@ -7,23 +7,47 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import {Platform, Image, StyleSheet, Text, View, Button} from 'react-native';
+import ImagePicker from 'react-native-image-picker';
+import Tesseract from 'tesseract.js'
 
 type Props = {};
 export default class App extends Component<Props> {
+  state = {
+    pickedImage: null
+  }
+
+  pickImageHandler = () => {
+    ImagePicker.showImagePicker((response) => {
+      console.log('Response = ', response);
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+    
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+    
+        this.setState({
+          pickedImage: source,
+        });
+      }
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <View style={styles.imageContainer}>
+          <Image source={this.state.pickedImage}/>
+        </View>
+        <View style={styles.pickButton}>
+          <Button title="Choose Image" onPress={this.pickImageHandler}/>
+        </View>
       </View>
     );
   }
@@ -34,16 +58,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+    borderColor: 'red',
+    borderWidth: 1
+  }, 
+  imageContainer: {
+    width: "50%",
+    height: "30%",
+    borderColor: 'red', 
+    borderWidth: 1
+  }, 
+  pickButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'red', 
+    borderWidth: 1
+  }
+
+
+
 });
