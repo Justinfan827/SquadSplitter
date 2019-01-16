@@ -7,45 +7,35 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, Image, StyleSheet, Text, View, Button} from 'react-native';
+import {Platform, Image, StyleSheet, Text, TextInput, View, Button, FlatList, List, ListItem} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
 type Props = {};
 export default class FriendScreen extends Component<Props> {
   state = {
-    pickedImage: null
+    friends: ["Justin", "Austin", "Mohan", "Erik"],
+    text: "Useless Placeholder"
   }
 
-  pickImageHandler = () => {
-    ImagePicker.showImagePicker((response) => {
-      console.log('Response = ', response);
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        const source = { uri: response.uri };
-    
-        // You can also display the image using data:
-        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-    
-        this.setState({
-          pickedImage: source,
-        });
-      }
-    });
+  onChangeTextHandler = (text) => {
+    this.setState({text: text})
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.imageContainer}>
-          <Image source={this.state.pickedImage}/>
+      <View>
+        <View style={styles.container}>
+          <FlatList
+            data={this.state.friends}
+            renderItem={({ item }) => <Text>{item}</Text>}
+          />
         </View>
-        <View style={styles.pickButton}>
-          <Button title="Choose Image" onPress={this.pickImageHandler}/>
+        <View style={styles.container}>
+          <TextInput
+              style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+              onChangeText={this.onChangeTextHandler}
+              value={this.state.text}
+            />
         </View>
       </View>
     );
@@ -56,10 +46,12 @@ export default class FriendScreen extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    borderColor: 'red',
-    borderWidth: 1
+    borderColor: 'blue',
+    borderWidth: 1,
+    paddingTop: 40
   }, 
   imageContainer: {
     width: "50%",
