@@ -11,7 +11,7 @@ import {Platform, Image, StyleSheet, Text, View, Button} from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 
 type Props = {};
-export default class App extends Component<Props> {
+export default class FriendScreen extends Component<Props> {
   state = {
     pickedImage: null
   }
@@ -51,6 +51,7 @@ export default class App extends Component<Props> {
     );
   }
 }
+
 
 const styles = StyleSheet.create({
   container: {
